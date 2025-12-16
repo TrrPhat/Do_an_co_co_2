@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthProvider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowRight, Zap, Search, ChevronDown, CarFrontIcon } from 'lucide-react';
 
@@ -11,25 +12,27 @@ const navItems = [
     name: 'Thi thử lý thuyết',
     href: '/lythuyet',
     subItems: [
-      { name: '1', href: '/lythuyet/1' },
-      { name: '2', href: '/lythuyet/2' },
-      { name: '3', href: '/lythuyet/3' },
+      { name: '600 câu lý thuyết (tất cả)', href: '/lythuyet/600-cau' },
+      { name: 'Hạng B (30 câu - 20 đề + ngẫu nhiên)', href: '/lythuyet/hang-b' },
+      { name: 'Hạng A1 (25 câu - 10 đề + ngẫu nhiên)', href: '/lythuyet/hang-a1' },
     ]
   },
   {
     name: 'Tài liệu',
     href: '/tailieu',
     subItems: [
-      { name: '1', href: '/tailieu/1' },
-      { name: '2', href: '/tailieu/2' },
-      { name: '3', href: '/tailieu/3' },
+      { name: 'Tất cả', href: '/tailieu' },
+      { name: 'Mẹo', href: '/tailieu?type=tip' },
+      { name: 'Kinh nghiệm', href: '/tailieu?type=experience' },
+      { name: 'Luật', href: '/tailieu?type=law' },
+      { name: 'Kỹ thuật', href: '/tailieu?type=technique' },
     ]
   },
   { name: 'Khóa học', href: '/khoahoc' },
   { name: 'Liên hệ', href: '/lienhe' },
 ];
 
-export default function Header() {
+export default function Header() { const { user, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
@@ -216,6 +219,20 @@ export default function Header() {
                 <Search className="h-5 w-5" />
               </motion.button>
 
+              {user ? (
+                <>
+                  <div className="text-gray-700 px-2 text-sm">Xin chào, <span className="font-semibold">{user.name}</span></div>
+                  <motion.button
+                    onClick={logout}
+                    className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center space-x-2 rounded-lg px-4 py-2.5 text-sm font-medium shadow-sm transition-all duration-200"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Đăng xuất
+                  </motion.button>
+                </>
+              ) : (
+                <>
               <a
                 href="/login"
                 className="text-gray-700 hover:text-gray-900 px-4 py-2 text-sm font-medium transition-colors duration-200"
@@ -235,6 +252,8 @@ export default function Header() {
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </motion.div>
+                </>
+              )}
             </motion.div>
 
             {/* Mobile Menu Button */}
@@ -332,6 +351,18 @@ export default function Header() {
                   className="space-y-3 border-t border-gray-200 pt-6"
                   variants={mobileItemVariants}
                 >
+                  {user ? (
+                    <>
+                      <div className="text-gray-700 text-center">Xin chào, <span className="font-semibold">{user.name}</span></div>
+                      <button
+                        onClick={() => { logout(); setIsMobileMenuOpen(false); }}
+                        className="bg-gray-900 text-white hover:bg-gray-800 block w-full rounded-lg py-3 text-center font-medium transition-all duration-200"
+                      >
+                        Đăng xuất
+                      </button>
+                    </>
+                  ) : (
+                    <>
                   <a
                     href="/login"
                     className="text-gray-900 hover:bg-gray-50 block w-full rounded-lg py-3 text-center font-medium transition-colors duration-200"
@@ -346,6 +377,8 @@ export default function Header() {
                   >
                     Get Started
                   </a>
+                    </>
+                  )}
                 </motion.div>
               </div>
             </motion.div>

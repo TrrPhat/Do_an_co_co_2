@@ -8,10 +8,13 @@ import Earth from "@/components/ui/globe";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { Label } from "@/components/ui/label";
 import { Check, Loader2 } from "lucide-react";
+import { API_BASE_URL } from "@/lib/auth";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -23,18 +26,29 @@ export default function ContactForm() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // TODO: nối API backend khi có
-      console.log("Form submitted:", { name, email, message });
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await fetch(`${API_BASE_URL}/contacts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: name,
+          phone,
+          email,
+          subject,
+          message,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || 'Gửi thất bại');
       setName("");
       setEmail("");
+      setPhone("");
+      setSubject("");
       setMessage("");
       setIsSubmitted(true);
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
+      setTimeout(() => setIsSubmitted(false), 5000);
     } catch (error) {
       console.error("Error submitting form:", error);
+      alert(error.message || 'Có lỗi xảy ra');
     } finally {
       setIsSubmitting(false);
     }
@@ -81,9 +95,6 @@ export default function ContactForm() {
                 <h2 className="from-slate-900 to-slate-700 mb-2 bg-gradient-to-r bg-clip-text text-4xl font-bold tracking-tight text-transparent md:text-5xl">
                   Liên hệ
                 </h2>
-                <span className="text-blue-600 relative z-10 w-full text-4xl font-bold tracking-tight italic md:text-5xl">
-                  ngay
-                </span>
                 <SparklesCore
                   id="tsparticles"
                   background="transparent"
@@ -127,6 +138,7 @@ export default function ContactForm() {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Nhập họ tên"
                       required
+                      className="bg-white text-slate-900 placeholder-slate-400 border-slate-300 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
                     />
                   </motion.div>
 
@@ -135,14 +147,47 @@ export default function ContactForm() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}>
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="phone">Điện thoại</Label>
+                    <Input
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Số điện thoại"
+                      required
+                      className="bg-white text-slate-900 placeholder-slate-400 border-slate-300 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
+                    />
+                  </motion.div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <motion.div
+                    className="space-y-2"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.55 }}>
+                    <Label htmlFor="email">Email (không bắt buộc)</Label>
                     <Input
                       id="email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Nhập email"
-                      required
+                      className="bg-white text-slate-900 placeholder-slate-400 border-slate-300 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
+                    />
+                  </motion.div>
+
+                  <motion.div
+                    className="space-y-2"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}>
+                    <Label htmlFor="subject">Chủ đề</Label>
+                    <Input
+                      id="subject"
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder="VD: Tư vấn khóa học B1/B2"
+                      className="bg-white text-slate-900 placeholder-slate-400 border-slate-300 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
                     />
                   </motion.div>
                 </div>
@@ -151,7 +196,7 @@ export default function ContactForm() {
                   className="space-y-2"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}>
+                  transition={{ delay: 0.65 }}>
                   <Label htmlFor="message">Nội dung cần tư vấn</Label>
                   <Textarea
                     id="message"
@@ -159,7 +204,7 @@ export default function ContactForm() {
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Mô tả nhu cầu hoặc lịch trống của bạn"
                     required
-                    className="h-40 resize-none"
+                    className="h-40 resize-none bg-white text-slate-900 placeholder-slate-400 border-slate-300 focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:outline-none"
                   />
                 </motion.div>
 

@@ -132,7 +132,7 @@ export default function Footer() {
                     />
                   </svg>
                 </div>
-                <span className="text-3xl lg:text-4xl font-bold text-slate-900">DrivePro Academy</span>
+                <span className="text-3xl lg:text-4xl font-bold text-slate-900">Trắc nghiệm lái xe</span>
               </div>
               <p className="text-slate-700 mb-10 text-lg lg:text-xl xl:text-2xl max-w-md leading-relaxed">
                 Học lái xe thực chiến với giảng viên giàu kinh nghiệm, giáo trình bám sát đề thi và sa hình.

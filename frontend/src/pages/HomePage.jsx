@@ -75,9 +75,7 @@ export default function HomePage() {
                       scrollStart="top bottom"
                       scrollEnd="center center"
                     >
-                      Lái xe vững vàng.
-                      ㅤTương lai rộng mở.
-
+                      Lái xe vững vàng.Tương lai rộng mở.
                     </ScrollFloat>
 
                     <ScrollFade
@@ -192,10 +190,15 @@ export default function HomePage() {
             <ScrollStack
               className="lg:pr-8"
               innerClassName="pt-[0vh] px-0 pb-[20rem]"
-              itemDistance={80}
-              itemStackDistance={24}
-              baseScale={0.9}
-              itemScale={0.035}
+              itemDistance={120}
+              itemStackDistance={40}
+              baseScale={0.85}
+              itemScale={0.05}
+              stackPosition="20%"
+              scaleEndPosition="10%"
+              rotationAmount={2}
+              blurAmount={1}
+              useWindowScroll={true}
             >
               {/* Card 1 - White with Blue text */}
               <ScrollStackItem itemClassName="bg-white border border-slate-200">
@@ -256,7 +259,7 @@ export default function HomePage() {
           </div>
 
           {/* Right: Model Viewer */}
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end min-h-[600px]">
+          {/* <div className="order-1 lg:order-2 flex justify-center lg:justify-end min-h-[600px]">
           <ScrollFade
               className="w-full max-w-md"
               scrollStart="top bottom-=30%"
@@ -269,7 +272,7 @@ export default function HomePage() {
                 height={1000}
               />
             </ScrollFade>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
