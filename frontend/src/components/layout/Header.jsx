@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthProvider';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowRight, Zap, Search, ChevronDown, CarFrontIcon } from 'lucide-react';
+import { Menu, X, ArrowRight, Search, ChevronDown } from 'lucide-react';
 
 
 
@@ -32,7 +32,8 @@ const navItems = [
   { name: 'Liên hệ', href: '/lienhe' },
 ];
 
-export default function Header() { const { user, logout } = useAuth();
+export default function Header() {
+  const { user, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
@@ -90,24 +91,21 @@ export default function Header() { const { user, logout } = useAuth();
   return (
     <>
       <motion.header
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${isScrolled
-            ? 'border-b border-gray-400 shadow-xl backdrop-blur-lg'
-            : 'bg-transparent'
-          }`}
-        style={
+        className={`fixed z-50 transition-all duration-300 ${
           isScrolled
-            ? {
-              backgroundImage: 'linear-gradient(to top, #d5d4d0 0%, #d5d4d0 1%, #eeeeec 31%, #efeeec 75%, #e9e9e7 100%)',
-              backgroundColor: '#e9e9e7', 
-            }
-            : {}
-        }
+            ? 'top-3 left-4 right-4 rounded-2xl border border-gray-300 shadow-lg backdrop-blur-md bg-[#e7e2d9]/85'
+            : 'top-0 left-0 right-0 bg-transparent'
+        }`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+          <div
+            className={`flex items-center justify-between transition-all duration-300 ${
+              isScrolled ? 'h-12' : 'h-20'
+            }`}
+          >
             {/* Logo */}
             <motion.div
               className="flex items-center space-x-3"
@@ -117,12 +115,13 @@ export default function Header() { const { user, logout } = useAuth();
             >
               <Link to="/" className="flex items-center space-x-3">
                 <div className="relative">
-<div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg shadow-white/5">                    <CarFrontIcon className="h-5 w-5 text-black" />
-                  </div>
+                  {/* <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg shadow-white/5">
+                    <CarFrontIcon className="h-5 w-5 text-black" />
+                  </div> */}
                 </div>
                 <div className="flex flex-col">
                   <span className="text-gray-900 text-lg font-bold">
-                   Học tốt
+                    Học tốt
                   </span>
                   <span className="text-gray-600 -mt-1 text-xs">
                     Thi tốt
@@ -149,11 +148,11 @@ export default function Header() { const { user, logout } = useAuth();
                 >
                   <Link
                     to={item.href}
-                    className="text-gray-700 hover:text-gray-900 relative rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 flex items-center gap-1"
+                    className="relative rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 flex items-center gap-1 text-gray-900 hover:text-gray-900"
                   >
                     {hoveredItem === item.name && (
                       <motion.div
-                        className="bg-gray-100 absolute inset-0 rounded-lg"
+                        className={`absolute inset-0 rounded-lg ${isScrolled ? 'bg-gray-100/80' : 'bg-white/10'}`}
                         layoutId="navbar-hover"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -167,7 +166,11 @@ export default function Header() { const { user, logout } = useAuth();
                     )}
                     <span className="relative z-10">{item.name}</span>
                     {item.subItems && (
-                      <ChevronDown className={`h-4 w-4 relative z-10 transition-transform duration-200 ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                      <ChevronDown
+                        className={`h-4 w-4 relative z-10 transition-transform duration-200 ${
+                          openDropdown === item.name ? 'rotate-180' : ''
+                        }`}
+                      />
                     )}
                   </Link>
 
@@ -212,7 +215,7 @@ export default function Header() { const { user, logout } = useAuth();
               variants={itemVariants}
             >
               <motion.button
-                className="text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-lg p-2 transition-colors duration-200"
+                className="text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg p-2 transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -221,7 +224,9 @@ export default function Header() { const { user, logout } = useAuth();
 
               {user ? (
                 <>
-                  <div className="text-gray-700 px-2 text-sm">Xin chào, <span className="font-semibold">{user.name}</span></div>
+                  <div className="text-gray-700 px-2 text-sm">
+                    Xin chào, <span className="font-semibold">{user.name}</span>
+                  </div>
                   <motion.button
                     onClick={logout}
                     className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center space-x-2 rounded-lg px-4 py-2.5 text-sm font-medium shadow-sm transition-all duration-200"
@@ -233,25 +238,25 @@ export default function Header() { const { user, logout } = useAuth();
                 </>
               ) : (
                 <>
-              <a
-                href="/login"
-                className="text-gray-700 hover:text-gray-900 px-4 py-2 text-sm font-medium transition-colors duration-200"
-              >
-                Sign In
-              </a>
+                  <a
+                    href="/login"
+                    className="text-gray-900 hover:text-gray-900 px-4 py-2 text-sm font-medium transition-colors duration-200"
+                  >
+                    Sign In
+                  </a>
 
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <a
-                  href="/signup"
-                  className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center space-x-2 rounded-lg px-5 py-2.5 text-sm font-medium shadow-sm transition-all duration-200"
-                >
-                  <span>Get Started</span>
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <a
+                      href="/signup"
+                      className="bg-gray-900 text-white hover:bg-gray-800 inline-flex items-center space-x-2 rounded-lg px-5 py-2.5 text-sm font-medium shadow-sm transition-all duration-200"
+                    >
+                      <span>Get Started</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </motion.div>
                 </>
               )}
             </motion.div>
@@ -363,20 +368,20 @@ export default function Header() { const { user, logout } = useAuth();
                     </>
                   ) : (
                     <>
-                  <a
-                    href="/login"
-                    className="text-gray-900 hover:bg-gray-50 block w-full rounded-lg py-3 text-center font-medium transition-colors duration-200"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sign In
-                  </a>
-                  <a
-                    href="/signup"
-                    className="bg-gray-900 text-white hover:bg-gray-800 block w-full rounded-lg py-3 text-center font-medium transition-all duration-200"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Get Started
-                  </a>
+                      <a
+                        href="/login"
+                        className="text-gray-900 hover:bg-gray-50 block w-full rounded-lg py-3 text-center font-medium transition-colors duration-200"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </a>
+                      <a
+                        href="/signup"
+                        className="bg-gray-900 text-white hover:bg-gray-800 block w-full rounded-lg py-3 text-center font-medium transition-all duration-200"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Get Started
+                      </a>
                     </>
                   )}
                 </motion.div>
@@ -389,4 +394,3 @@ export default function Header() { const { user, logout } = useAuth();
     </>
   );
 }
-

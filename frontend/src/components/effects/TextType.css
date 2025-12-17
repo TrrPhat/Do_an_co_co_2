@@ -1,0 +1,5 @@
+.text-type{display:inline-flex;align-items:baseline;gap:0.2ch}
+.text-type__content{white-space:pre-wrap}
+.text-type__cursor{display:inline-block;margin-left:0.15em;opacity:1}
+.text-type__cursor--hidden{opacity:0}
+
