@@ -13,6 +13,9 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  optimizeDeps: {
+    exclude: ['gsap', 'gsap/all', 'motion', 'motion/react']
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

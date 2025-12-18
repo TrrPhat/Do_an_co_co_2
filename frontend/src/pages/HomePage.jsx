@@ -6,7 +6,8 @@ import backgroundVideo from '../assets/vdbackground.mp4';
 import { useLayoutEffect, useRef } from 'react';
 import '../styles/slider.css';
 import { gsap } from 'gsap';
-import { Draggable, ScrollTrigger } from 'gsap/all'; // import from gsap/all to avoid Draggable/draggable casing issues on Windows
+import { Draggable } from 'gsap/Draggable';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DecryptedText from '../components/effects/DecryptedText';
 import TextType from '../components/effects/TextType';
 
@@ -55,12 +56,13 @@ export default function HomePage() {
           draggable: true,
           center: false,
           onChange: (element, index) => {
-            // Mark current element active
+            // Design offset: make the element to the RIGHT the active one
             activeElement && activeElement.classList.remove('active');
-            element.classList.add('active');
-            activeElement = element;
+            const nextSibling = element.nextElementSibling || slides[0];
+            nextSibling.classList.add('active');
+            activeElement = nextSibling;
 
-            // Move the number to the correct spot
+            // Move the number to the correct spot (based on the logical index)
             if (allSteps) gsap.to(allSteps, { y: `${-100 * index}%`, ease: 'power3', duration: 0.45 });
           }
         });
